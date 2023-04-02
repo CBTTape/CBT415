@@ -1,0 +1,22 @@
+//COPYHLP JOB 01,'COPY HELP',CLASS=A,MSGCLASS=H,REGION=2048K
+//*
+//* DESC: Copy the TSO HELP members of RPF
+//*       the dataset represented in //HELPOUT should
+//*       be a TSO HELP library in //SYSHELP dd statement in your
+//*       TSO LOGON procedure.
+//*
+//STEP01  EXEC PGM=IEBCOPY
+//SYSPRINT DD  SYSOUT=*
+//HELPIN   DD  DISP=SHR,DSN=hlq.V194.HELP  <==== SPECIFY RPF HELP DATASET
+//HELPOUT  DD  DISP=SHR,DSN=XXXXXXXX.HELP  <==== TSO HELP LIBRARY
+//SYSIN    DD  *
+ COPY INDD=((HELPIN,R)),OUTDD=HELPOUT
+ S M=RPF
+ S M=RPFV
+ S M=RPFED
+ S M=RPFHELP1
+ S M=RPFHELP2
+ S M=RPFHELP3
+ S M=RPFHELP4
+ S M=RPFHELP5
+/*

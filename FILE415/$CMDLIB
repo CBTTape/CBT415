@@ -1,0 +1,16 @@
+//Z531415C JOB 01,CMDLIB,CLASS=A,MSGCLASS=X,REGION=2048K,
+//             NOTIFY=&SYSUID
+//*
+//* DESC: Copy the RPF loadmodules to a linklisted LOAD library
+//*       like SYS2.CMDLIB
+//*
+//ALLOC   EXEC PGM=IEBCOPY
+//LOAD     DD  DISP=SHR,DSN=hlq.V194.LOADLIB <=== Please tailor
+//CMDLIB   DD  DISP=SHR,DSN=SYS3.CMDLIB      <=== Please tailor
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+ COPY INDD=CMDLIB,OUTDD=CMDLIB
+ COPY INDD=((LOAD,R)),OUTDD=CMDLIB
+ COPY INDD=CMDLIB,OUTDD=CMDLIB
+/*
+//

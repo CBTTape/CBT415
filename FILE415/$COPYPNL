@@ -1,0 +1,16 @@
+//COPYPNL JOB 01,'COPY PANELS',CLASS=A,MSGCLASS=H,REGION=2048K
+//*
+//* DESC: Copy the ISPF panel for the RPFED, RPFBR, RPFPD,
+//*       RPFST and RPFV command processor to execute RPF
+//*       functions in ISPF.
+//*       Please tailor this job against your own environment.
+//*
+//STEP01  EXEC PGM=IEBCOPY
+//SYSPRINT DD  SYSOUT=*
+//PNLIN    DD  DISP=SHR,DSN=hlq.V194.PANELS  <== Please tailor
+//PNLOUT   DD  DISP=SHR,DSN=xxxxxxxx.ISPPLIB <== ISPF PANEL LIBRARY
+//SYSIN    DD  *
+ COPY INDD=((PNLIN,R)),OUTDD=PNLOUT
+ E M=ISRFPA     /* remove this statement for MVS38J */
+/*
+//

@@ -1,0 +1,45 @@
+//LOADRPF  JOB 01,'RPF LOAD',REGION=2048K,MSGCLASS=X,CLASS=A
+//*            //*JOBPARM LINECT=0
+//*--------------------------------------------------------------------
+//* INSTALL ONLY THE RPF LOAD MODULES
+//* Change the 'vvvvvv', 'uuuu', 'loadlib' and 'your-prefix' according
+//* your own environment.
+//*
+//* in z/OS you can issue the following TSO command:
+//* RECEIVE INDATASET('your-prefix.FILE415(LOADXMI)')
+//* reply the prompt 'ENTER RESTORE PARAMETERS..' with a dataset name
+//* of the LOADLIB according your own environment.
+//*--------------------------------------------------------------------
+//RECV370 PROC
+//RECV370 EXEC PGM=RECV370
+//STEPLIB  DD  DSN=SYS2.LOCAL.LINKLIB,DISP=SHR <-- change if necessary
+//XMITPRT  DD  SYSOUT=*
+//*
+//* COMMENT OUT THE NOT APPLICABLE XMITIN DD-STATEMENT AND TAILOR THE
+//* DATA SET NAME.
+//*
+//XMITIN   DD  DSN=your-prefix.FILE415(LOADXMI),DISP=OLD   *Z/OS **
+//XMITIN   DD  DSN=your-prefix.FILE415(LOADXMIM),DISP=OLD  *MVS38J*
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  DUMMY
+//SYSUT1   DD  DSN=&&LOAD,
+//             UNIT=SYSALLDA,
+//             SPACE=(CYL,(3,1),RLSE),
+//             DISP=(,DELETE)
+//SYSUT2   DD  DSN=loadlib,
+//             UNIT=uuuu,VOL=SER=vvvvvv,
+//             SPACE=(CYL,(3,1,25),RLSE),
+//             DISP=(,CATLG)
+//SYSUDUMP DD  SYSOUT=*
+//RECVLOG  DD  SYSOUT=*
+//         PEND
+//*--------------------------------------------------------------------
+//DELETE   EXEC PGM=IEHPROGM
+//SYSPRINT DD SYSOUT=*
+//MVS3390  DD UNIT=uuuu,VOL=SER=vvvvvv,DISP=SHR
+//SYSIN    DD *
+ SCRATCH DSNAME=loadlib,VOL=uuuu=vvvvvv
+ UNCATLG DSNAME=loadlib
+//*
+//RECV1    EXEC RECV370
+//

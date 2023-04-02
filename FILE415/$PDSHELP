@@ -1,0 +1,15 @@
+//Z531415H JOB 01,RPF,CLASS=A,MSGCLASS=X,NOTIFY=Z531415
+//*
+//*      Desc: Load the member HELP into the RPF HELP dataset.
+//*            Please tailor this job against your own environment.
+//*            Change 'uuuu','vvvvvv', 'your-prefix'  and 'hlq'
+//*            as required.
+//*
+//STEP01 EXEC PGM=PDSLOAD
+//SYSPRINT DD SYSOUT=*
+//SYSUT2 DD DSN=hlq.V194.HELP,      <=== Please tailor
+//          DISP=(NEW,CATLG,DELETE),
+//          DCB=(RECFM=FB,LRECL=80,BLKSIZE=6160),
+//          UNIT=uuuu,VOL=SER=vvvvvv,
+//          SPACE=(CYL,(10,2,30))
+//SYSUT1 DD DISP=SHR,DSN=your-prefix.FILE415(HELP)

@@ -1,0 +1,638 @@
+./ ADD NAME=ISPUTILS 0119-15319-22332-1200-00052-00044-00021-Z531415 00
+)ATTR
+/* Panel: ISPUTILS with option 4R added for MVS38J      */
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ @ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(TURQ)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+)BODY WIDTH(&ZSCREENW) EXPAND(//)
+%                           Utility selection menu        / /
+%Option  ===>_ZCMD                                                             +
+%
+%   1 @LIBRARY     + Library utility:
++                           Print index listing or entire data set
++                           Print, rename, delete, or browse members
+%   2 @DATASET     + Data set utility:
++                           Display data set information
++                           Allocate, rename, or delete entire data set
++                           Catalog or uncatalog data set
+%   3 @MOVE/COPY   + Move, copy, or promote members or data sets
+%   4 @DSLIST      + Data set list:
++                           Print or display (to process) list of data set names
+%   4R@DSLIST RPF  + Data set list RPF:
++                           Print or display (to process) list of data set names
+%   5 @RESET       + Reset statistics for members of ISPF library
+¬   6 ¬HARDCOPY    + Initiate hardcopy output
+¬   7 ¬VTOC        + Display DISK Volume Table Of Contents
+%   8 @OUTLIST     + Display, delete, or print held (Class Q) JOB output
+%   9 @COMMANDS    + Create/change an application command table
+)INIT
+  .HELP = ISR30000
+)PROC
+  &ZSEL = TRANS( TRUNC (&ZCMD,'.')
+                1,'CMD(RFE 3.1;X) NEWAPPL(ISR)'
+                2,'CMD(RFE 3.2;X) NEWAPPL(ISR)'
+                3,'CMD(RFE 3.3;X) NEWAPPL(ISR)'
+                4,'CMD(RFE 3.4;X) NEWAPPL(ISR)'
+                4R,'PANEL(RPFV) NEWAPPL(ISR)'
+                5,'CMD(RFE 3.5;X) NEWAPPL(ISR)'
+/*              6,'PGM(ISRUHC)'                           */
+/*              7,'PGM(ISRUVT)'                           */
+                8,'CMD(REVOUT *)  NEWAPPL(ISR)'
+                9,'PANEL(ISPUCMA)'
+              ' ',' '
+                *,'?' )
+)END
+./ ADD NAME=ISRFPA   0105-21142-22266-0939-00035-00034-00001-Z531415 00
+)ATTR
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ @ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(TURQ)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+)BODY WIDTH(&ZSCREENW) EXPAND(//)
+%                           ISPF foreground menu         / /
+%Option  ===>_ZCMD
+                                                        / /+USERID  @: &ZUSER  +
+%   1 @ASSEMBLER   + RPF foreground assembler and link  / /+TIME    @: &ZTIME  +
+%   X @EXIT        + Exit foreground menu
+%
++Enter%END+command to return.
+%
+)INIT
+  .HELP = ISP00000
+  &ZPRIM = NO         /* Not a primary option menu         */
+  &ZHTOP = ISP00000   /* TUTORIAL TABLE OF CONTENTS        */
+  &ZHINDEX = ISP91000 /* TUTORIAL INDEX - 1ST PAGE isptutor*/
+)PROC
+  &ZSEL = TRANS(TRUNC(&ZCMD,'.')
+                1,'CMD(RPFASM00) NEWAPPL(ISR)'
+              ' ',' '
+                X,'EXIT'
+                *,'?' )
+  &ZTRAIL = .TRAIL
+)END
+./ ADD NAME=RPFED    0141-21119-21123-1904-00099-00063-00000-Z531415 00
+)ATTR
+/* Panel: RPFED. Panel for MVS38J systems                */
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+ ¢ TYPE(TEXT)  INTENS(HIGH) COLOR(YELLOW)
+)BODY WIDTH(&ZSCREENW) EXPAND(//)
+%--------------------------  RPFED - ENTRY PANEL  ---------/-/-----------------
+%Command ===>_ZCMD                                                             +
++
+%ISPF Library:
++   Project%===>_PRJ1    %
++   Library%===>_LIB1    %
++   Type   %===>_TYP1    %
++   Member %===>_MEM1    %
+%Other Partitioned or sequential data set:
++   Data Set Name  %===>_Z                                                     +
++   Volume Serial  %===>_Z     +    (If not cataloged)
++  ¢RPF CP name    %===>_RPFCMD  +  (RPFED, RPFBR, RPFPD or RPFST)
++
++  ¢RPFED +calls the RPF editor or EDIT member selection list.
++  ¢RPFBR +calls the RPF browser or Browse member selection list.
++  ¢RPFPD +calls the RPF PDS(E) maintenance routine.
++  ¢RPFST +calls the RPF RESET or Delete ISPF stats routine.
++
+%New userid and ISPF vv and ISPF mm (only if CP name = RPFST)
++   New userid     %===>_NUID    +  (New userid string in ISPF stats)
++   New version    %===>_NV+        (New ISPF vv, default = 01)
++   New mod lvl    %===>_NM+        (New ISPF mm, default = 00)
+)INIT
+ .ZVARS  = (DSN1,VOL1)
+ .HELP   = RPFEDH00
+ &ROPT   = ''
+ &ZPRIM = NO
+ &ZHTOP  = RPFEDH00
+ &ZHINDEX = RPFEDH01
+ IF (&DSN1 = '')
+   .CURSOR = MEM1
+ IF (&DSN1 ¬= '')
+   .CURSOR = DSN1
+ &MEM1 = ''
+ IF (&RPFCMD = '')  &RPFCMD = 'RPFED'
+ IF (&NUID EQ '')
+   &NUID = &ZUSER
+)REINIT
+ &MEM1 = ''
+)PROC
+ VER (&RPFCMD,LIST,RPFED,RPFBR,RPFPD,RPFST)
+ &RPFPDSN = &DSN1
+ &RPFPVOL = &VOL1
+ &OPTS = 'SIZE(12000)'
+ IF (&NUID NE '')
+   &OPTN = 'NEWUSER(&NUID)'
+ &OPTV = 'VERSION(0100)'
+ IF (&NV NE '')
+   &OPTV = 'VERSION(&NV.00)'
+   IF (&NM NE '')
+     &OPTV = 'VERSION(&NV.&NM)'
+ IF (&RPFPDSN NE '')
+   &RPFEQUO = TRUNC(&RPFPDSN, 1)
+   IF (&RPFEQUO = '''')
+     &RPFPDSN   = .TRAIL
+     &RPFPDSN   = TRUNC (&RPFPDSN,'''')
+     &RPFPDSN   = '''&RPFPDSN'''
+   &RPFPDSNZ    = &RPFPDSN
+   &REVS = &ZSCBR
+   IF (&RPFPVOL NE '')
+     &ROPT = 1
+   ELSE
+     &ROPT = 2
+ ELSE
+   VER (&PRJ1,NB)
+   VER (&LIB1,NB)
+   VER (&TYP1,NB)
+   IF (&MEM1 EQ '')
+     &RPFPDSNZ   = '''&PRJ1..&LIB1..&TYP1'''
+     &REVS = &ZSCML
+   ELSE
+     &RPFPDSNZ   = '''&PRJ1..&LIB1..&TYP1(&MEM1)'''
+     &REVS = &ZSCBR
+   &ROPT = 3
+ VPUT (PRJ1 LIB1 TYP1) PROFILE
+ VPUT (RPFPDSN RPFPVOL) SHARED
+ VPUT (RPFCMD NUID NV NM) PROFILE
+ &ZSEL = TRANS(&ROPT,
+               1,'CMD(&RPFCMD &RPFPDSNZ VOL(&RPFPVOL) &OPTS &OPTN &OPTV)'
+               2,'CMD(&RPFCMD &RPFPDSNZ &OPTS &OPTN &OPTV)'
+               3,'CMD(&RPFCMD &RPFPDSNZ &OPTS &OPTN &OPTV)'
+              ' ',' '
+               *,'?' )
+)END
+./ ADD NAME=RPFEDHZ0 0102-21123-21123-1920-00048-00049-00000-Z531415 00
+)ATTR
+/* Panel: RPFEDHZ0. Panel for OS/390 and z/OS systems.      */
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+ ¢ TYPE(TEXT)  INTENS(HIGH) COLOR(YELLOW)
+)BODY EXPAND(//)
+%TUTORIAL -----------------  RPFED - HELP PANEL  ----------/-/------ TUTORIAL
+%OPTION  ===>_ZCMD
+%
+%                         RPFED command processor
++
++ ¢RPFED+let you EDIT, Browse, library management or RESET ISPF statistics,
++        depending of the¢RPF CP name+in the RPFED panel.
++
++ ¢RPFED+executes the RPF EDIT function of a partitioned or sequential
++        data set. EDIT of data sets with a RECFM of F(B) and V(B)
++        with a record length up to 255 is possible.
++ ¢RPFBR+executes the RPF BROWSE function of a partitioned or sequential
++        data set. The RECFM can be F(B), V(B) or U.
++ ¢RPFPD+executes the RPF Library management function of a partitioned
++        data set. Press F1 in library management for more information.
++ ¢RPFST+executes the RPF RESET ISPF stats function of a partitioned
++        data set. You can RESET or DELETE ISPF stats of members.
++        Specify a New USERID, VERSION and Mod lvl for the RESET function.
++        The default New USERID is the userid of the TSO session.
++        The default VERSION = '01'. The default Mod lvl = '00'.
++
++Select%1+for an explanation of some EDIT commands.
++
++Enter%END+command to return.
+)INIT
+ &ZCMD = ' '
+ &ZHTOP = RPFEDHZ0
+ .HELP = RPFEDH01
+)PROC
+ &ZSEL = TRANS(&ZCMD,
+               1,RPFEDH01
+               *,'?')
+)END
+./ ADD NAME=RPFEDH00 0149-21120-21123-1920-00048-00040-00000-Z531415 00
+)ATTR
+/* Panel: RPFEDH00. Panel for MVS38J systems              */
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+ ¢ TYPE(TEXT)  INTENS(HIGH) COLOR(YELLOW)
+)BODY EXPAND(//)
+%TUTORIAL -----------------  RPFED - HELP PANEL  ----------/-/------ TUTORIAL
+%OPTION  ===>_ZCMD
+%
+%                         RPFED command processor
++
++ ¢RPFED+let you EDIT, Browse, library management or RESET ISPF statistics,
++        depending of the¢RPF CP name+in the RPFED panel.
++
++ ¢RPFED+executes the RPF EDIT function of a partitioned or sequential
++        data set. EDIT of data sets with a RECFM of F(B) and V(B)
++        with a record length up to 255 is possible.
++ ¢RPFBR+executes the RPF BROWSE function of a partitioned or sequential
++        data set. The RECFM can be F(B), V(B) or U.
++ ¢RPFPD+executes the RPF Library management function of a partitioned
++        data set. Press F1 in library management for more information.
++ ¢RPFST+executes the RPF RESET ISPF stats function of a partitioned
++        data set. You can RESET or DELETE ISPF stats of members.
++        Specify a New USERID, VERSION and Mod lvl for the RESET function.
++        The default New USERID is the userid of the TSO session.
++        The default VERSION = '01'. The default Mod lvl = '00'.
++
++Select%1+for an explanation of some EDIT commands.
++
++Enter%END+command to return.
+)INIT
+ &ZCMD = ' '
+ &ZHTOP = RPFEDH00
+ .HELP = RPFEDH01
+)PROC
+ &ZSEL = TRANS(&ZCMD,
+               1,'PANEL(RPFEDH01)'
+               *,'?')
+)END
+./ ADD NAME=RPFEDH01 0113-21121-21121-1049-00047-00047-00000-Z531415 00
+)ATTR
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+ ¢ TYPE(TEXT)  INTENS(HIGH) COLOR(YELLOW)
+)BODY EXPAND(\\)
+%TUTORIAL -----------------  RPFED - HELP PANEL  ----------\-\------ TUTORIAL
+%OPTION  ===>_ZCMD                                                             +
+%
+%                         RPFED command processor
++
++The most used RPF EDIT primary commands are:
+¢1. %DOWN     -+1 page forward.        ¢16.%UNNUM    -+Remove line numbers.
+¢2. %UP       -+1 page backward.       ¢17.%BOTTOM   -+Scroll to last page.
+¢3. %LEFT     -+Scroll to left.        ¢18.%TOP      -+Scroll to first page.
+¢4. %RIGHT    -+Scroll to right.       ¢19.%PFK      -+Alter/display PFK's.
+¢6. %F str    -+Search string 'str'.   ¢20.%C /x/y/A -+Change char. strings.
+¢7. %COLS     -+Toggle scale line.     ¢21.%SUB      -+Submit data.
+¢8. %PROF     -+Toggle profile line.   ¢22.%TSO      -+Enter TSO panel.
+¢9. %COBOL ON -+Align on Cobol mode.   ¢23.%I mm,n   -+Insert n lines after mm.
+¢10.%COBOL OFF-+Go to standard mode.   ¢24.%DEL n,m  -+Delete lines n thru m.
+¢11.%CAPS ON  -+Translate to capitals. ¢25.%SAVE     -+Save data in data set.
+¢12.%CAPS OFF -+Leave in ASIS mode.    ¢26.%CAN(CEL) -+Terminate without SAVE.
+¢13.%NULLS ON -+Trailing blanks - nulls¢27.%END      -+Terminate (and Save)
+¢14.%NULLS OFF-+Trailing nulls - blanks
+¢15.%RENUM    -+Renumber data
++
++
++
++Enter%END+command to return.
+)INIT
+&ZHTOP = RPFEDH00
+)PROC
+  &ZSEL = TRANS(TRUNC(&ZCMD,'.')
+              ' ',' '
+                X,'EXIT'
+                *,'?' )
+  &ZTRAIL = .TRAIL
+)END
+./ ADD NAME=RPFEDZOS 0192-21115-21123-1906-00201-00200-00000-Z531415 00
+)ATTR DEFAULT(%+_)
+/* Panel: RPFEDZOS. Panel for z/OS systems         */
+    # TYPE(AB)    FORMAT(MIX)
+    % TYPE(TEXT)  INTENS(HIGH) COLOR(WHITE) SKIP(ON)
+    ¢ TYPE(TEXT)  INTENS(HIGH) COLOR(YELLOW)
+    + TYPE(TEXT)  INTENS(LOW)  COLOR(TURQ) SKIP(ON)
+    { TYPE(OUTPUT) INTENS(HIGH)  COLOR(WHITE)
+    _ TYPE(INPUT) INTENS(HIGH) CAPS(ON) JUST(LEFT) COLOR(RED)
+    ¬ TYPE(INPUT) INTENS(HIGH) CAPS(ON) JUST(LEFT) COLOR(RED) PAD(_)
+    | TYPE(INPUT) INTENS(HIGH) CAPS(OFF)
+    " TYPE(ABSL) GE(ON)
+)ABC DESC('RefList') MNEM(1)
+PDC DESC('Current Data Set List &ZDSCURT.') MNEM(1) ACC(CTRL+ALT+P)
+ ACTION RUN(ISRRLIST) PARM('PL1')
+PDC DESC('Current Library List &ZDSCURLT.') MNEM(2) ACC(CTRL+SHIFT+P)
+ ACTION RUN(ISRRLIST) PARM('LL1')
+PDC DESC('List of Personal Data Set Lists') MNEM(1) PDSEP(ON) ACC(CTRL+ALT+O)
+ ACTION RUN(ISRRLIST) PARM('PL2')
+PDC DESC('List of Personal Library Lists') MNEM(2) ACC(CTRL+SHIFT+O)
+ ACTION RUN(ISRRLIST) PARM('LL2')
+)ABCINIT
+.ZVARS=REFLIST
+      VGET (ZCURTB ZCURLTB) PROFILE
+      IF (&ZCURTB = &Z) &ZDSCURT = &Z
+      ELSE &ZDSCURT= '(&ZCURTB)'
+      IF (&ZCURLTB = &Z) &ZDSCURLT = &Z
+      ELSE &ZDSCURLT= '(&ZCURLTB)'
+)ABC DESC('RefMode') MNEM(2)
+PDC DESC('List Execute') UNAVAIL(ZRM1) MNEM(1) ACTION RUN(ISRRLIST) PARM('BEX')
+PDC DESC('List Retrieve') UNAVAIL(ZRM2) MNEM(2) ACTION RUN(ISRRLIST) PARM('BRT')
+)ABCINIT
+.ZVARS=REFMODE
+  VGET (ZBLIST) PROFILE
+  IF (&ZBLIST = 'EXECUTE')
+    &zrm1 = 1
+    &zrm2 = 0
+    &refmode = 2
+  ELSE
+    &zrm1 = 0
+    &zrm2 = 1
+    &refmode = 1
+)ABC DESC('Help') MNEM(1)
+PDC PDCTEXT('RPF full-screen help')
+ ACTION RUN(TSO) PARM('HEL RPF')
+PDC PDCTEXT('RPFED full-screen help')
+ ACTION RUN(TSO) PARM('HEL RPFED')
+)ABCINIT
+.ZVARS=HELP
+)BODY EXPAND(\\)
+%# RefList# RefMode# Help+
+"-------------------------------------------------------------------------------
++\ \¢RPFED  Command Processor\ \
+%Command ===>_ZCMD                                                             +
++
+%ISPF Library:
++   Project%===>_PRJ1    %
++   Library%===>_LIB1    %
++   Type   %===>_TYP1    %
++   Member %===>_MEM1    %
+%Other Partitioned or sequential data set:
++   Data Set Name  %===>|DSN1                                                {Z
++   Volume Serial  %===>_VOL1  +    (If not cataloged)
++  ¢RPF CP name    %===>_RPFCMD  +  (RPFED, RPFBR, RPFPD or RPFST)
++
++  ¢RPFED +calls the RPF editor or EDIT member selection list.
++  ¢RPFBR +calls the RPF browser or Browse member selection list.
++  ¢RPFPD +calls the RPF PDS(E) maintenance routine.
++  ¢RPFST +calls the RPF RESET or Delete ISPF stats routine.
++
+%New userid and ISPF vv and ISPF mm (only if CP name = RPFST)
++   New userid     %===>_NUID    +  (New userid string in ISPF stats)
++   New version    %===>_NV+        (New ISPF vv)
++   New mod lvl    %===>_NM+        (New ISPF mm)
+)INIT
+  .ZVARS = '(DSN1IND)'
+  .CURSOR = DSN1
+  .NRET = ON
+  IF (&RPFPDSN = &Z)
+    .CURSOR = MEM1
+  IF (&RPFPDSN ¬= &Z)
+    .CURSOR = DSN1
+  .HELP   = RPFEDHZ0
+  &ZHTOP  = RPFEDHZ0
+  &MEM1 = &Z
+  &DSN1 = &RPFPDSN
+  &VOL1 = &RPFPVOL
+  IF (&RPFCMD = &Z)  &RPFCMD = 'RPFED'
+)REINIT
+  .CURSOR = DSN1
+  .NRET = ON
+  IF (&DSN1 ¬= &Z)
+    &DSN1 = &RPFPDSN
+    &VOL1 = &RPFPVOL
+    &MEM1 = &Z
+  REFRESH (*)
+)PROC
+  /* Start NRETRIEV code */
+  .NRET = OFF
+  VER (&RPFCMD,LIST,RPFED,RPFBR,RPFPD,RPFST)
+  IF (&ZVERB = NRETRIEV)
+    VGET (ZCURTB,ZCURLTB) PROFILE
+    IF (.CURSOR NE DSN1 AND .CURSOR NE VOL1)
+      .NRET = LIB
+      IF (&ZNRLIB = YES)
+        .CURSOR = MEM1
+        &PRJ1 = &ZNRPROJ
+        &LIB1 = &ZNRGRP1
+        &TYP1 = &ZNRTYPE
+        &MEM1 = &ZNRMEM
+        &DSN1 = &Z
+        &VOL1 = &Z
+        .MSG = ISRDS013
+      ELSE .MSG = ISRDS011
+    ELSE
+      .NRET = DSN
+      IF (&ZNRDS = YES)
+        .CURSOR = DSN1
+        &DSN1 = &ZNRODSN
+        &VOL1 = &ZNRVOL
+        .MSG = ISRDS014
+      ELSE .MSG = ISRDS012
+  /* End NRETRIEV code */
+
+  /* Start RefList code */
+  VGET (ZRDSN ZRVOL) SHARED
+  IF (&ZRDSN ¬= ' ')
+    &DSN1 = &ZRDSN
+    VGET (ZREFVOLM) PROFILE
+    IF (&ZREFVOLM = 'ON')
+      &VOL1 = &ZRVOL
+    ELSE                                                  /* OW15849*/
+      &VOL1 = &Z                                          /* OW15849*/
+    &ZDSVOL = &VOL1
+    .CURSOR = DSN1
+    &ZRDSN = ' '
+    &ZRVOL = ' '
+    VPUT (ZRDSN ZRVOL) SHARED
+    VPUT (ZDSVOL) SHARED
+    VGET (ZBLIST) PROFILE
+    IF (&ZBLIST ¬= 'EXECUTE') .MSG = ISRDS003
+  VGET (DSALSEL) SHARED
+  IF (&DSALSEL ¬= ' ')
+    VGET (DSA1,DSA2,DSA6,DSA7) SHARED
+    &PRJ1 = &DSA1
+    &LIB1 = &DSA2
+    &TYP1 = &DSA6
+    &MEM1  = &DSA7
+    &DSN1 = ' '
+    &VOL1 = ' '
+    &DSALSEL = ' '
+    VPUT (DSALSEL) SHARED
+    .CURSOR = MEM1
+    VGET (ZBLIST) PROFILE
+    IF (&ZBLIST ¬= 'EXECUTE') .MSG = ISRDS003
+  /* End RefList code */
+
+  &RPFPDSN = &DSN1
+  &RPFPVOL = &VOL1
+  &OPTS = 'SIZE(10000)'
+  IF (&NUID NE &Z)
+    &OPTN = 'NEWUSER(&NUID)'
+  IF (&NV NE &Z)
+    &OPTV = 'VERSION(&NV.00)'
+    IF (&NM NE &Z)
+      &OPTV = 'VERSION(&NV.&NM)'
+  VPUT (PRJ1 LIB1 TYP1) PROFILE
+  VPUT (RPFPDSN RPFPVOL) SHARED
+  VPUT (RPFCMD NUID NV NM) PROFILE
+
+  IF (&DSN1 = &Z)
+    VER (&PRJ1,NB,DSNAME)
+    VER (&LIB1,NB,DSNAME)
+    VER (&TYP1,NB,DSNAME)
+    IF (&MEM1 = &Z)
+      &OPT2 = 0
+    ELSE
+      VER (&MEM1,DSNAME,MSG=ISRE090)
+      &OPT2 = 1
+    IF (&VOL1 ¬= &Z) .MSG=ISRE094
+
+  IF (&DSN1 ¬= &Z)
+     &RFC = TRUNC(&DSN1,1)          /* If first character    */
+     IF (&RFC = '''')               /*   of DSN is "'" check */
+        &RREM = .TRAIL              /*   to see if last "'"  */
+        &RREM2 = TRUNC(&RREM,'''')  /*   is missing.         */
+        IF (&RREM2 = &RREM)         /* If last "'" missing   */
+           &DSN1 = '&DSN1&RFC'      /*   add it to the end.  */
+     IF (&VOL1 = &Z)
+        &OPT2 = 2
+     IF (&VOL1 ¬= &Z)
+        &OPT2 = 3
+  &ZSEL = TRANS(&OPT2,
+          0,'CMD(&RPFCMD ''&PRJ1..&LIB1..&TYP1'' &OPTS &OPTN &OPTV)'
+          1,'CMD(&RPFCMD ''&PRJ1..&LIB1..&TYP1(&MEM1)'' &OPTS &OPTN &OPTV)'
+          2,'CMD(&RPFCMD &DSN1 &OPTS &OPTN &OPTV)'
+          3,'CMD(&RPFCMD &DSN1 VOL(&VOL1) &OPTS &OPTN &OPTV)'
+         ' ',' '
+          *,'?' )
+)FIELD
+  FIELD(DSN1) IND(DSN1IND) LEN(1023)
+)END
+./ ADD NAME=RPFV     0112-21318-21318-2149-00057-00046-00000-Z531415 00
+)ATTR
+/* Panel: RPFV. Panel for MVS38J systems                */
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+ ¢ TYPE(TEXT)  INTENS(HIGH) COLOR(YELLOW)
+)BODY WIDTH(&ZSCREENW) EXPAND(//)
+%------------------------  RPFV DSLIST - ENTRY PANEL  ---------/-/--------------
+%Command ===>_ZCMD                                                             +
++
+%Data set prefix (max 17 positions):
++   PREFIX         %===>_Z                +
++
+%Volume serial (required if PREFIX not specified):
++   VOLUME         %===>_Z     +
+%
+%
+%
+%
+%
+%
++Enter%END+command to return.
+%
+)INIT
+ .ZVARS  = (PFXR,VOLR)
+ .CURSOR = PFXR
+ .HELP   = RPFVH00
+ &ROPT   = ''
+ &ZPRIM = NO
+ &ZHTOP  = RPFVH00
+ IF (&PFXR = '')
+    &PFXR = &ZUSER
+)PROC
+ &OPTS = 'SIZE(12000)'
+ &ROPT = 1
+ IF (&PFXR = '')
+    VER (&VOLR,NB)
+ &PFXR2 = &PFXR
+ IF (&PFXR = '')
+    &PFXR2 = 'NONE'
+ IF (&VOLR = '')
+    &ROPT = 2
+ VPUT (PFXR VOLR) PROFILE
+ &ZSEL = TRANS(&ROPT,
+               1,'CMD(RPFV PREFIX(&PFXR2) VOL(&VOLR) &OPTS)'
+               2,'CMD(RPFV PREFIX(&PFXR2) &OPTS)'
+              ' ',' '
+               *,'?' )
+)END
+./ ADD NAME=RPFVH00  0104-21318-21318-2144-00042-00048-00000-Z531415 00
+)ATTR
+/* Panel: RPFEDH0V. Panel for MVS38J systems              */
+ + TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(GREEN)
+ % TYPE(TEXT)   INTENS(HIGH) SKIP(ON)    COLOR(WHITE)
+ ¬ TYPE(TEXT)   INTENS(LOW)  SKIP(ON)    COLOR(YELLOW)
+ _ TYPE(INPUT)  INTENS(LOW)  JUST(LEFT)  COLOR(TURQ)
+ # TYPE(INPUT)  INTENS(LOW)  JUST(ASIS)
+ ~ TYPE(INPUT)  INTENS(HIGH) JUST(LEFT)
+ ! TYPE(INPUT)  INTENS(HIGH) JUST(RIGHT)
+ { TYPE(OUTPUT) INTENS(LOW)  JUST(LEFT)
+ } TYPE(OUTPUT) INTENS(LOW)  JUST(RIGHT)
+ Ý TYPE(OUTPUT) INTENS(HIGH) JUST(LEFT)
+ ¨ TYPE(OUTPUT) INTENS(HIGH) JUST(RIGHT)
+ ¢ TYPE(TEXT)  INTENS(HIGH) COLOR(YELLOW)
+)BODY EXPAND(//)
+%TUTORIAL -----------------  RPFV - DSLIST HELP PANEL  ----/-/------ TUTORIAL
+%OPTION  ===>_ZCMD
+%
+%                         RPFV command processor
++
++ ¢RPFV +Presents an RPF data set list on your screen.
++        You can select th following options.
++
++        %PREFIX+Specify a data set prefix of max. 17 characters
++                E.g. SYS1 or SYS1.ISP.
++                PREFIX is initially set to your TSO userid if
++                not specified.
++                If you erase PREFIX, VOLUME should be specified
++
++        %VOLUME+Specify a DASD volume or leave blank.
++                If both PREFIX and VOLUME are specified,
++                RPFV selects the data sets on the specified
++                volume.
++                If PREFIX is blank and VOLUME specified, all
++                data sets on the specified volume are selected.
++
++Enter%END+command to return.
+)INIT
+ &ZCMD = ' '
+ &ZHTOP = RPFVH00
+)PROC
+)END
