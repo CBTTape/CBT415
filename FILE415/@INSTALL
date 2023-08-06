@@ -1,0 +1,96 @@
+Installation Checklist
+-----------------------------------------------------------------
+
+The FILE415.XMI file (this file) is mapped as an XMIT dataset.
+Upload the XMI dataset with PC 3270 file transfer like IND$FILE
+with the binary option.
+If you have NJE38 installed in MVS 3.8J or use TSO/E in OS/390 or
+z/OS, execute the following TSO command RECEIVE.
+
+RECEIVE INDATASET('uploaded dataset name')
+and reply 'Enter restore parameters or END' with:
+DA('dataset name')
+
+An alternative way is to run the RECV370 utility of Jim Morrison.
+You will find RECV370 in file 571 on cbttape.org.
+
+Now we are ready to install RPF. If you follow the instructions
+below, installation is a piece of cake.
+
+Required jobs
+-------------
+
+- Run job $LOADMVS to copy the loadmodules into a load libary.
+  in MVS 3.8J. This job uses RECEIVE of NJE38.
+  Alternatively you can run $RECVLD if NJE38 is not installed.
+
+                          ---- OR ----
+
+  Run job $LOADZOS to copy the loadmodules into a load libary.
+  in OS/390 or ZOS.
+
+- Run job $PDSHELP to create the RPF HELP library.
+
+- Run job $COPYHLP to copy the TSO help members in a HELP library
+  present in the //SYSHELP DD statement of your TSO logon
+  procedure.
+
+- Run job $CMDLIB to copy the contents of the RPF load library
+  into a LNKLST library like SYS2.CMDLIB. A LNKLST accessable
+  library should be cataloged in the master catalog.
+  Authorize this library in SYS1.PARMLIB(IEFAPFxx).
+
+- Run job $PROFILE to create the RPF profile cluster.
+  If the cluster of a previous RPF is present, skip this job.
+
+- Download member $MANUAL# with IND$FILE with the binary option
+  to your workstation for the PDF version of the RPF Users' Guide
+  and /or ...
+  Download member $MANUAL$ with IND$FILE with the binary option
+  to your workstation for the MS WORD version of the RPF User's
+  Guide.
+
+Optional jobs
+-------------
+
+- There are ISPF panels for executing the RPFED, RPFBR, RPFPD,
+  and RPFST TSO command processor.
+  Run job $PDSPNL to create the RPF panel library.
+  Run job $COPYPNL to copy the panel library to a library in the
+  ISPPLIB concatenation of the TSO logon procedure.
+
+- Install the source library, macro and JCL library with job
+  $PDSLOAD.
+
+Notes for OS390 or z/OS.
+------------------------
+- Update member IKJTSOxx to specify programs RPF and RPFMAIN in the
+  AUTHCMD statement.
+  Activate this member with the command PARMLIB UPDATE(xx).
+
+Notes for MVS38J or MVS380.
+---------------------------
+
+- It is recommended to install usermods ZP60008 and ZP60009.
+  ZP60008 and ZP60009 makes larger screens than 1920 bytes (24x80)
+  possible (support the Erase Write Alternate, EWA and TPUT NOEDIT).
+  Screensizes can be up to 16384 bytes.
+  If ZP60008 and ZP60009 are not applied, RPF works well on a
+  standard 24x80 screen.
+  These usermods can be found on the site of Greg Price
+  http://www.prycroft6.com.au/vs2mods/index.html.
+  If running MVS38J TK4- (distributed by Jürgen Winkelmann and me),
+  ZP60008 and ZP60009 are already applied.
+
+- If you are installing RPF for the very first time on MVS38J or
+  from version 1 release 9.1, check and possible modify, and
+  run the job in member ZUM0001 in library SYS1.UMODCNTL
+  to make RPF, RPFMAIN and RPFV authorized in TSO.
+  Before submit of ZUM0001 check the contents of member IKJEFTE2
+  in library SYS1.UMODSRC and eventually add RPF, RPFMAIN and RPFV
+  Re-IPL with CLPA to activate usermod ZUM0001.
+
+Now, the installation of RPF is finished. Logon to TSO and try out
+RPF. Have a lot of fun.
+
+(C)-2023 Skybird Systems

@@ -1,0 +1,43 @@
+//Z531415D JOB 01,ROB,MSGCLASS=H,NOTIFY=Z531415,REGION=2048K
+//*********************************************************************
+//*
+//* DESC: INSTALL RPF PROFILE VSAM CLUSTER.
+//*       RUN THIS JOB ONLY IF YOU INSTALL RPF FOR THE FIRST TIME.
+//*
+//*********************************************************************
+//DEFINE  EXEC PGM=IDCAMS
+//REPROIN  DD  *
+99999999    SEED RECORD FOR THE RPF PROFILE CLUSTER
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+ PARM GRAPHICS(CHAIN(SN))
+   DELETE RPF.PROFILE CLUSTER
+   SET LASTCC = 0
+   SET MAXCC  = 0
+ /***********************************************************/
+ /*                                                         */
+ /* NOTE:  YOU WILL HAVE TO MODIFY THE VOLUME NAMES         */
+ /*        AND THE DATASET NAME TO REFLECT YOUR             */
+ /*        SYSTEM ENVIRONMENT                               */
+ /*                                                         */
+ /***********************************************************/
+  DEFINE CLUSTER ( NAME(RPF.PROFILE) -    <--- PLEASE TAILOR
+                   VOL(VOLSER) -          <--- PLEASE TAILOR
+                   FREESPACE(20 10) -
+                   RECORDSIZE(1750 1750) -
+                   INDEXED -
+                   IMBED -
+                   UNIQUE  -
+                   KEYS(8 0) -
+                   CYLINDERS(1 1) -
+                 ) -
+            DATA ( NAME(RPF.PROFILE.DATA) -
+                   SHR(3 3) -
+                 ) -
+           INDEX ( NAME(RPF.PROFILE.INDEX) -
+                   SHR(3 3) -
+                 )
+  IF LASTCC = 0 THEN -
+     REPRO INFILE(REPROIN) -
+           OUTDATASET(RPF.PROFILE)
+/*

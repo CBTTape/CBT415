@@ -1,0 +1,40 @@
+//LOADRPFM JOB 01,'RPF LOAD',REGION=2048K,MSGCLASS=X,CLASS=A,
+//         NOTIFY=&SYSUID
+//*--------------------------------------------------------------------
+//* Last update: 2023/07/22 16:48
+//*
+//* Install only the RPF load modules in MVS 3.8J if NJE38 is
+//* not installed. Otherwise run job $LOADMVS.
+//* Change the 'vvvvvv', 'uuuu', 'loadlib' and 'your-prefix' according
+//* your own environment.
+//*
+//*--------------------------------------------------------------------
+//RECV370 PROC
+//RECV370 EXEC PGM=RECV370
+//STEPLIB  DD  DSN=SYS2.LOCAL.LINKLIB,DISP=SHR <-- change if necessary
+//XMITPRT  DD  SYSOUT=*
+//*
+//XMITIN   DD  DSN=your-prefix.FILE415(LOADXMIM),DISP=OLD  *MVS38J*
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  DUMMY
+//SYSUT1   DD  DSN=&&LOAD,
+//             UNIT=SYSALLDA,
+//             SPACE=(CYL,(3,1),RLSE),
+//             DISP=(,DELETE)
+//SYSUT2   DD  DSN=loadlib,
+//             UNIT=uuuu,VOL=SER=vvvvvv,
+//             SPACE=(CYL,(3,1,25),RLSE),
+//             DISP=(,CATLG)
+//SYSUDUMP DD  SYSOUT=*
+//RECVLOG  DD  SYSOUT=*
+//         PEND
+//*--------------------------------------------------------------------
+//DELETE   EXEC PGM=IEHPROGM
+//SYSPRINT DD SYSOUT=*
+//MVS3390  DD UNIT=uuuu,VOL=SER=vvvvvv,DISP=SHR
+//SYSIN    DD *
+ SCRATCH DSNAME=loadlib,VOL=uuuu=vvvvvv
+ UNCATLG DSNAME=loadlib
+//*
+//RECV1    EXEC RECV370
+//

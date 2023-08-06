@@ -1,0 +1,34 @@
+//Z531415L JOB 01,RPF,CLASS=A,MSGCLASS=X,NOTIFY=Z531415
+//*
+//*      Desc: Optional material.
+//*            Load the members ASM, JCL and SYS1MAC into a PDS.
+//*            Please tailor this job against your own environment.
+//*            Change 'uuuu','vvvvvv', 'your-prefix'  and 'hlq'
+//*            as required.
+//*
+//STEP01 EXEC PGM=PDSLOAD
+//SYSPRINT DD SYSOUT=*
+//SYSUT2 DD DSN=hlq.V195.ASM,
+//          DISP=(NEW,CATLG,DELETE),
+//          DCB=(RECFM=FB,LRECL=80,BLKSIZE=6160),
+//          UNIT=uuuu,VOL=SER=vvvvvv,
+//          SPACE=(CYL,(10,2,30))
+//SYSUT1 DD DSN=your-prefix.FILE415(ASM),DISP=SHR
+//*
+//STEP02 EXEC PGM=PDSLOAD
+//SYSPRINT DD SYSOUT=*
+//SYSUT2 DD DSN=hlq.V195.JCL,
+//          DISP=(NEW,CATLG,DELETE),
+//          DCB=(RECFM=FB,LRECL=80,BLKSIZE=6160),
+//          UNIT=uuuu,VOL=SER=vvvvvv,
+//          SPACE=(CYL,(1,1,5))
+//SYSUT1 DD DSN=your-prefix.FILE415(JCL),DISP=SHR
+//*
+//STEP03 EXEC PGM=PDSLOAD
+//SYSPRINT DD SYSOUT=*
+//SYSUT2 DD DSN=hlq.V195,MACLIB,
+//          DISP=(NEW,CATLG,DELETE),
+//          DCB=(RECFM=FB,LRECL=80,BLKSIZE=6160),
+//          UNIT=uuuu,VOL=SER=vvvvvv,
+//          SPACE=(CYL,(1,1,5))
+//SYSUT1 DD DSN=your-prefix.FILE415(SYS1MAC),DISP=SHR
